@@ -1,0 +1,14 @@
+http://stackoverflow.com/questions/296975/how-do-i-tell-git-svn-about-a-remote-branch-created-after-i-fetched-the-repo
+
+git config --add svn-remote.newbranch.url https://svn.path/to/newbranch/
+git config --add svn-remote.newbranch.fetch :refs/remotes/newbranch
+git svn fetch newbranch [-r<rev>]
+
+git checkout -b local-newbranch newbranch
+git svn rebase newbranch
+
+This should leave an entry similar to this in your git config:
+
+[svn-remote "newbranch"]
+	url: https://svn.path/to/newbranch
+	fetch: :refs/remotes/newbranch
