@@ -1,0 +1,40 @@
+So, you want to run devenv or cl from Cygwin.  Welp, it was a long and arduous
+process, but it is hookupable.  That's the technical term for pain-in-the-ass.
+
+Okay, so Cygwin is pretty smart and will take all variables from the environment
+that it was launched in and magically provide them to bash, which is very useful
+for this purpose, since vsvars32.bat basically just sets environment variables.
+
+So instead of launching from C:\tools\cygwin\bin\mintty.exe we're going to take
+a page from the Cygwin cookbook and launch it from a batch file.
+
+Cygwin ships with a default C:\tools\cygwin\Cygwin.bat, which you can add this:
+
+call "%VS110COMNTOOLS%vsvars32.bat"
+
+line to.
+
+Note that %VS110COMNTOOLS% is a Windows environment variable that gets
+set to the root of the Visual Studio installation path, presumably when you
+install VS.  The 110 part is important, it corresponds to the version number
+found in "C:\Program Files (x86)\Visual Studio XX.X\"  Yours may be different
+than 110, for instance 140 for 14.0 or 80 for 8.0
+
+So now that we've got the good shit loaded into our batchfile environment we're
+going to need to start a sane terminal emulator and load bash into it.
+
+Changing the default line (I think it just calls /bin/bash --login -i) to this:
+
+C:\tools\cygwin\bin\mintty /bin/bash --login
+
+Which fires up mintty, loads bash and logs us in (so .bash_profile get sourced).
+
+
+Almost done; now we need a way to quickly launch this stupid thing.  If you've
+got a method that you prefer all the power to you, but what I did was create a
+shortcut to the batchfile and pin it to the taskbar.
+
+First, create a shortcut.  Now you have to RMB->properties and edit the target
+field to be cmd.exe /C "path/to/batfile", where path/to/batfile SHOULD be what's
+there already.  Now just drag it onto the taskbar and launch away!
+
