@@ -1,0 +1,12 @@
+
+Output a sorted list of files by the number of hits a grep search retuns
+
+
+grep -P: use perl regex
+grep -c: output counts instead of the lines that match.
+
+sort -k: which field to sort on
+sort -t: what to use as a field delimeter
+sort -n: compare numerical values instead of string values
+
+grep -Pc $SEARCH_REGEX $FILES | sort -t ":" -k 2 -n
