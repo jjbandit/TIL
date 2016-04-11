@@ -38,3 +38,15 @@ First, create a shortcut.  Now you have to RMB->properties and edit the target
 field to be cmd.exe /C "path/to/batfile", where path/to/batfile SHOULD be what's
 there already.  Now just drag it onto the taskbar and launch away!
 
+Apparently, if your annoyed that a cmd window pops up every time you use the
+shortcut, after pinning, you can open the shortcut at:
+
+C:\Users\<User name>\AppData\Roaming\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar
+
+and change the target path back to path-to-your-batch.  Didn't take time to
+confirm though.
+
+Also found another way of doing this, which is more representative of what's
+actually happening here:
+
+https://social.technet.microsoft.com/Forums/windows/en-US/a44e74a1-20cd-4924-8f2b-3e6b688f1ad7/adding-batch-files-to-windows-7-taskbar-like-the-vistaxp-quick-launch?forum=w7itproui
