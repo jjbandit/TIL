@@ -1,4 +1,18 @@
+#! /bin/bash
+
+# This recursive function is nessicary because git-svn will occationally die of
+# a segfault in perl.. FML. It runs the command, and if it dies unexpectedly
+# then just restarts itself.
+
+function gitSvnFetch(){
+	git svn fetch "$1" # -r $rev  << This is optional and for some reason breaking.
+
+	[ $? -ne 0 ] && gitSvnFetch "$1"
+}
+
+
 # http://stackoverflow.com/questions/296975/how-do-i-tell-git-svn-about-a-remote-branch-created-after-i-fetched-the-repo
+
 
 [ $# -eq 0 ] && echo "Please specify a task number." && exit 1
 
@@ -25,7 +39,8 @@ if [ $? -ne 0 ]; then
 	echo "Added config.fetch"
 fi
 
-git svn fetch $newbranch # -r $rev  << This is optional and for some reason breaking.
+# git svn fetch $newbranch # -r $rev  << This is optional and for some reason breaking.
+gitSvnFetch "$newbranch"
 
 git checkout -b "$newbranch" "remotes/FS%2520$newbranch"
 git svn rebase $newbranch
@@ -35,3 +50,5 @@ git svn rebase $newbranch
 # [svn-remote "newbranch"]
 # 	url: https://svn.path/to/newbranch
 # 	fetch: :refs/remotes/newbranch
+
+
