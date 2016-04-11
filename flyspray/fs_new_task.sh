@@ -1,13 +1,55 @@
 #! /bin/bash
 
-[ $# -eq 0 ] && echo "Please supply a task name! Exiting." && exit 1
 
-echo $1
+# If you want to add this task as a dependency of another task add the following
+# line just below the notifyme field.
+
+
+
+if [ $# -eq 0 ]; then
+	echo "Please supply a task title! Exiting."
+	exit 1
+fi
+
+if [ $1 = "-h" ]; then 
+	echo "  -----------------------------------------------------"
+	echo ""
+	echo "  Usage: fs_new_task.sh <Title> [Description] [Parent ID]"
+	echo ""
+	echo "    Required: Arg 1 specifies the task title."
+	echo ""
+	echo "    Optional: Arg 2 specifies the task description."
+	echo ""
+	echo "    Optional: Arg 3 specifies what task to use as the new tasks parent."
+	echo ""
+	echo "  -----------------------------------------------------"
+
+	exit 0
+fi
+
+# Defaults:
+
+TASK_NAME="$1"
+DESCRIPTION="Such Details."
+CREATE_DEPENDANT=''
+
+
+if [ $# -gt 1 ]; then
+	DESCRIPTION="$2"
+fi
+
+
+if [ $# -gt 2 ]; then
+	PARENT_ID="$3"
+	CREATE_DEPENDANT=$'--%#%#\r\nContent-Disposition: form-data; name="add_depend"\r\n\r\n'"$PARENT_ID"$'\r\n'
+fi
+
+
 
 
 # Make it so!
 
-curl 'http://flyspray.excelsystems.com/flyspray/index.php?do=newtask&project=2' \
+URL=$(curl 'http://flyspray.excelsystems.com/flyspray/index.php?do=newtask&project=2' \
 \
 -H 'Host: flyspray.excelsystems.com' \
 \
@@ -23,21 +65,25 @@ curl 'http://flyspray.excelsystems.com/flyspray/index.php?do=newtask&project=2' 
 \
 -H 'Content-Type: multipart/form-data; boundary=%#%#' \
 \
---data-binary $'--%#%#\r\nContent-Disposition: form-data; name="item_summary"\r\n\r\n'"$1"$'\r\n
+--data-binary $'--%#%#\r\nContent-Disposition: form-data; name="item_summary"\r\n\r\n'"$TASK_NAME"$'\r\n
 --%#%#\r\nContent-Disposition: form-data; name="task_type"\r\n\r\n2\r
 --%#%#\r\nContent-Disposition: form-data; name="product_category"\r\n\r\n5\r
 --%#%#\r\nContent-Disposition: form-data; name="item_status"\r\n\r\n2\r
 --%#%#\r\nContent-Disposition: form-data; name="find_user"\r\n\r\n\r
---%#%#\r\nContent-Disposition: form-data; name="rassigned_to[]"\r\n\r\n83\r
+--%#%#\r\nContent-Disposition: form-data; name="rassigned_to[]"\r\n\r\n'"$FS_UID"$'\r
 --%#%#\r\nContent-Disposition: form-data; name="operating_system"\r\n\r\n8\r
 --%#%#\r\nContent-Disposition: form-data; name="task_severity"\r\n\r\n2\r
 --%#%#\r\nContent-Disposition: form-data; name="task_priority"\r\n\r\n2\r
 --%#%#\r\nContent-Disposition: form-data; name="product_version"\r\n\r\n333\r
 --%#%#\r\nContent-Disposition: form-data; name="closedby_version"\r\n\r\n0\r
 --%#%#\r\nContent-Disposition: form-data; name="due_date"\r\n\r\n\r
---%#%#\r\nContent-Disposition: form-data; name="detailed_desc"\r\n\r\nSuch details.\r
+--%#%#\r\nContent-Disposition: form-data; name="detailed_desc"\r\n\r\n'"$DESCRIPTION"$'\r
 --%#%#\r\nContent-Disposition: form-data; name="userfile[]"; filename=""\r\nContent-Type: application/octet-stream\r\n\r\n\r
 --%#%#\r\nContent-Disposition: form-data; name="action"\r\n\r\nnewtask.newtask\r
 --%#%#\r\nContent-Disposition: form-data; name="project_id"\r\n\r\n2\r
 --%#%#\r\nContent-Disposition: form-data; name="notifyme"\r\n\r\n1\r
---%#%#--\r\n'
+'"$CREATE_DEPENDANT"$'--%#%#--\r\n' )
+
+task_id=$(echo $URL | grep -Po "(?<=task_id=)(\d+)" | head -1)
+
+echo $task_id
