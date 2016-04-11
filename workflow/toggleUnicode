@@ -1,0 +1,19 @@
+#! /bin/bash
+
+function toggleUnicode() {
+
+	if [ "$UNICODE" = "Unicode" ]; then
+		echo "Toggling Unicode off."
+		UNICODE="Not Set"
+		setx UNICODE "Not Set"
+
+	else
+		echo "Toggling Unicode on."
+		UNICODE="Unicode"
+		setx UNICODE "Unicode"
+
+	fi
+
+	[ -e ./WebsmartAll.sln ] && touch ./WebsmartAll.sln
+
+}
