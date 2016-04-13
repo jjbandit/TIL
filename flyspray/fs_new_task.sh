@@ -4,14 +4,7 @@
 # If you want to add this task as a dependency of another task add the following
 # line just below the notifyme field.
 
-
-
-if [ $# -eq 0 ]; then
-	echo "Please supply a task title! Exiting."
-	exit 1
-fi
-
-if [ $1 = "-h" ]; then 
+function printHelp() {
 	echo "  -----------------------------------------------------"
 	echo ""
 	echo "  Usage: fs_new_task.sh <Title> [Description] [Parent ID]"
@@ -25,7 +18,13 @@ if [ $1 = "-h" ]; then
 	echo "  -----------------------------------------------------"
 
 	exit 0
-fi
+}
+
+# Error handling
+
+[ "$#" -eq 0 ] && printHelp
+
+[ "$1" = "-h" ] && printHelp
 
 # Defaults:
 
@@ -49,7 +48,7 @@ fi
 
 # Make it so!
 
-URL=$(curl 'http://flyspray.excelsystems.com/flyspray/index.php?do=newtask&project=2' \
+URL=$(curl --silent 'http://flyspray.excelsystems.com/flyspray/index.php?do=newtask&project=2' \
 \
 -H 'Host: flyspray.excelsystems.com' \
 \
