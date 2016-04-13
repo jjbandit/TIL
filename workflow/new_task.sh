@@ -1,8 +1,6 @@
 #! /bin/bash
 
-[ $# -eq 0 ] && echo "Please pass me a task title, exiting." && exit 1
-
-if [ $1 = "-h" ]; then 
+function printHelp() {
 	echo "  -----------------------------------------------------"
 	echo ""
 	echo "  Usage: new_task.sh <Title> [Description] [Parent ID]"
@@ -16,7 +14,11 @@ if [ $1 = "-h" ]; then
 	echo "  -----------------------------------------------------"
 
 	exit 0
-fi
+}
+
+[ "$#" -eq 0 ] && printHelp
+
+[ "$1" = "-h" ] && printHelp
 
 isGitRepo=$(git rev-parse --is-inside-work-tree > /dev/null 2>&1)
 [ $? -ne 0 ] && echo "Not inside a git repo, exiting." && exit 1
@@ -24,4 +26,4 @@ isGitRepo=$(git rev-parse --is-inside-work-tree > /dev/null 2>&1)
 TASK_ID=$(fs_new_task.sh "$@" )
 
 powershell svn_branch "$TASK_ID"
-~/til/git_svn/git_svn_track_remote_svn_branch.sh "$TASK_ID"
+~/til/git_svn/git_svn_track_remote_svn_branch.sh "$TASK_ID" > /dev/null
