@@ -3,7 +3,7 @@
 "
 " .. go svn.
 
-function SanitizeSvnDiff()
+function! SanitizeSvnDiff()
 
 	" Delete the context cruft that we may or may not care about
 	g/^[^-+@].*$/d
