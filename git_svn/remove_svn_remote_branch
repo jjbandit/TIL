@@ -7,3 +7,8 @@ rm -rf .git/svn/refs/remotes/mybranch
 
 I also found an interesting way to automate this process for many branches.
 http://stackoverflow.com/questions/5914681/git-svn-bulk-removing-orphaned-remote-branches/7209462#7209462
+
+# The docs also state it's also a good idea to remove the branches metadata at:
+
+.git/svn/.metadata
+
