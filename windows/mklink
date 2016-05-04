@@ -1,0 +1,4 @@
+
+# create a symlink from an elevated cmd prompt with
+
+mklink [ /D (directory) ] <symlink path> <symlink target>
