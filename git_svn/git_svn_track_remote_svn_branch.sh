@@ -7,7 +7,7 @@
 function gitSvnFetch(){
 	git svn fetch "$1" # -r $rev  << This is optional and for some reason breaking.
 
-	[ $? -ne 0 ] && gitSvnFetch "$1"
+	[ $? -ne 0 ] && gitSvnFetch "$1" && echo "Retrying..."
 }
 
 
