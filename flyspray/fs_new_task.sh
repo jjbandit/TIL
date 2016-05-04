@@ -20,6 +20,19 @@ function printHelp() {
 	exit 0
 }
 
+function interactiveInput() {
+	fs_temp="~/.fspray.tmp"
+	touch $fs_temp
+	vim $fs_temp
+
+	TASK_NAME=$(head -n 1 $fs_temp)
+	TASK_DESC=$(tail -n +3 $fs_temp)
+
+	rm $fs_temp
+
+	PARENT_ID="$2"
+}
+
 # Error handling
 
 [ "$#" -eq 0 ] && printHelp
@@ -29,12 +42,12 @@ function printHelp() {
 # Defaults:
 
 TASK_NAME="$1"
-DESCRIPTION="Such Details."
+TASK_DESC="Such Details."
 CREATE_DEPENDANT=''
 
 
 if [ $# -gt 1 ]; then
-	DESCRIPTION="$2"
+	TASK_DESC="$2"
 fi
 
 
@@ -44,7 +57,7 @@ if [ $# -gt 2 ]; then
 fi
 
 
-
+[ "$1" = "-i" ] && interactiveInput "$@"
 
 # Make it so!
 
@@ -76,7 +89,7 @@ URL=$(curl --silent 'http://flyspray.excelsystems.com/flyspray/index.php?do=newt
 --%#%#\r\nContent-Disposition: form-data; name="product_version"\r\n\r\n333\r
 --%#%#\r\nContent-Disposition: form-data; name="closedby_version"\r\n\r\n0\r
 --%#%#\r\nContent-Disposition: form-data; name="due_date"\r\n\r\n\r
---%#%#\r\nContent-Disposition: form-data; name="detailed_desc"\r\n\r\n'"$DESCRIPTION"$'\r
+--%#%#\r\nContent-Disposition: form-data; name="detailed_desc"\r\n\r\n'"$TASK_DESC"$'\r
 --%#%#\r\nContent-Disposition: form-data; name="userfile[]"; filename=""\r\nContent-Type: application/octet-stream\r\n\r\n\r
 --%#%#\r\nContent-Disposition: form-data; name="action"\r\n\r\nnewtask.newtask\r
 --%#%#\r\nContent-Disposition: form-data; name="project_id"\r\n\r\n2\r
