@@ -1,6 +1,6 @@
-# CScope can take an input of files from a list, so let's build that list first
-# wrapped in double quotes to handle spaces in filenames.
+# CScope can take an input of files from a list, so we're going to build a list
+# of all source files (wrapped in quotes) then build our database from that.
 
-find . -type f -print | grep -E '\.(c(pp)?|h)$' | sed 's/.*/"&"/' > cscope.list
+cpp_and_headers.sh > cscope.list
 
 cscope -b -i cscope.list
