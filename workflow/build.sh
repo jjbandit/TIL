@@ -1,5 +1,37 @@
 #! /bin/bash
 
+TARGETS=
+
+while [[ $# > 0 ]]
+do 
+	arg="$1"
+
+	case $arg in
+		-u|--tests-unicode)
+			TARGETS="$TESTER_U"
+			break
+			;;
+		-t|--tests)
+			TARGETS="$TESTER"
+			break
+			;;
+		-i|--ile)
+			TARGETS="$ILE"
+			break
+			;;
+		-p|--php)
+			TARGETS="$PHP"
+			break
+			;;
+		-a|--all)
+			TARGETS="$TESTER_U $TESTER $PHP $ILE"
+			break
+			;;
+	esac
+
+	shift
+done
+
 trap CancelBuild INT
 
 function CancelBuild() {
