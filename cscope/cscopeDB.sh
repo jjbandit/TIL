@@ -3,4 +3,4 @@
 
 find . -type f -print | grep -E '\.(c(pp)?|h)$' | sed 's/.*/"&"/' > cscope.list
 
-cscope -i cscope.list
+cscope -b -i cscope.list
