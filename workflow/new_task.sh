@@ -16,9 +16,24 @@ function printHelp() {
 	exit 0
 }
 
+function interactiveInput() {
+	fs_temp="~/.fspray.tmp"
+	touch $fs_temp
+	vim $fs_temp
+
+	TASK_NAME=$(head -n 1 $fs_temp)
+	TASK_DESC=$(tail -n +3 $fs_temp)
+
+	rm $fs_temp
+
+	PARENT_ID="$2"
+}
+
 [ "$#" -eq 0 ] && printHelp
 
 [ "$1" = "-h" ] && printHelp
+
+[ "$1" = "-i" ] && interactiveInput "$@"
 
 isGitRepo=$(git rev-parse --is-inside-work-tree > /dev/null 2>&1)
 [ $? -ne 0 ] && echo "Not inside a git repo, exiting." && exit 1
