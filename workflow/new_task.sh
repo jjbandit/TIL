@@ -26,19 +26,20 @@ function interactiveInput() {
 
 	rm $fs_temp
 
-	PARENT_ID="$2"
+	PARENT_ID="$1"
 }
 
 [ "$#" -eq 0 ] && printHelp
 
 [ "$1" = "-h" ] && printHelp
 
-[ "$1" = "-i" ] && interactiveInput "$@"
+[ "$1" = "-i" ] && shift && interactiveInput "$@"
 
 isGitRepo=$(git rev-parse --is-inside-work-tree > /dev/null 2>&1)
 [ $? -ne 0 ] && echo "Not inside a git repo, exiting." && exit 1
 
-TASK_ID=$(fs_new_task.sh "$@" )
+TASK_ID=$(fs_new_task.sh "$TASK_NAME" "$TASK_DESC" "$PARENT_ID" )
 
 powershell svn_branch "$TASK_ID"
+
 ~/til/git_svn/git_svn_track_remote_svn_branch.sh "$TASK_ID" > /dev/null
