@@ -1,0 +1,4 @@
+
+Use the -b flag (binary) to have sed preserve line endings on Windows.
+
+sourced from http://stackoverflow.com/questions/4652652/preserve-line-endings
