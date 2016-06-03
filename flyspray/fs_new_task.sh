@@ -31,6 +31,7 @@ function interactiveInput() {
 	rm $fs_temp
 
 	PARENT_ID="$2"
+	CREATE_DEPENDANT=$'--%#%#\r\nContent-Disposition: form-data; name="add_depend"\r\n\r\n'"$PARENT_ID"$'\r\n'
 }
 
 # Error handling
