@@ -1,0 +1,3 @@
+
+
+sed 's/target/needle/g' haystack
