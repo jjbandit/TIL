@@ -43,7 +43,7 @@ fi
 gitSvnFetch "$newbranch"
 
 git checkout -b "$newbranch" "remotes/FS%2520$newbranch"
-git svn rebase $newbranch
+git svn rebase "$newbranch"
 
 # This should leave an entry similar to this in your git config:
 
