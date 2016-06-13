@@ -11,7 +11,6 @@ function BuildLastTargets() {
 
 	if [ -f ~/.last_build ]; then
 		TARGETS=$(cat ~/.last_build)
-		echo $TARGETS
 
 	else
 		echo "No previous build target found, exiting."
