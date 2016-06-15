@@ -23,9 +23,21 @@ TARGETS=""
 
 TESTER="UnitTester/UnitTester.sln"
 ILE="WebSmart ILE Only.sln"
-UNICODE="WebSmartUnicode.sln"
 ALL="WebSmartAll.sln"
 
+if [ -f "WebSmartUnicode.sln" ]; then
+	UNICODE="WebSmartUnicode.sln"
+fi
+
+if [ -f "WebSmart PHP Only.sln" ]; then
+	UNICODE="WebSmart PHP Only.sln"
+fi
+
+if [ "$UNICODE" == "" ]
+then
+	echo "Unicode target not found"
+	exit 1
+fi
 
 # Run the last build target if we don't pass in an argument
 [ $# -lt 1 ] && BuildLastTargets
@@ -67,7 +79,7 @@ fi
 
 echo $TARGETS | tee ~/.last_build
 
-devenv.com $TARGETS /build  | \
+devenv.com "$TARGETS" /build  | \
 tee /dev/tty | \
 sed 's/\\/\//g' | \
 sed 's/[0-9]>\s*//g' | \
