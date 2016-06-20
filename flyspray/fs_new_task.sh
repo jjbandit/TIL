@@ -25,8 +25,8 @@ function interactiveInput() {
 	touch $fs_temp
 	vim $fs_temp
 
-	TASK_NAME=$(head -n 1 $fs_temp)
-	TASK_DESC=$(tail -n +3 $fs_temp)
+	TASK_NAME=$(echo -n `head -n 1 $fs_temp` )
+	TASK_DESC=$(echo -n `tail -n +3 $fs_temp` )
 
 	rm $fs_temp
 
