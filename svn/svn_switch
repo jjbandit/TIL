@@ -5,7 +5,11 @@
 
 function switchBranch()
 {
-	svn switch "http://svn.excelsystems.com/svn/websmart/websmart/branches/FS $1" 2> /dev/null
+	if [ $1 = "trunk" ]; then
+		svn switch "http://svn.excelsystems.com/svn/websmart/websmart/trunk" 2> /dev/null
+	else
+		svn switch "http://svn.excelsystems.com/svn/websmart/websmart/branches/FS $1" 2> /dev/null
+	fi
 }
 
 switchBranch "$1"
