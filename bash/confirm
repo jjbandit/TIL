@@ -1,0 +1,16 @@
+#! /bin/bash
+
+
+function Confirm {
+	echo " (y|n)"
+
+	read
+
+	if [[ "$REPLY" == "y" || "$REPLY" == "Y" || "$REPLY" == "yes" ]]; then
+		Confirm=0
+	fi
+
+	if [[ "$REPLY" == "n" || "$REPLY" == "N" || "$REPLY" == "no" ]]; then
+		Confirm=1
+	fi
+}
