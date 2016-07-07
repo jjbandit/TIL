@@ -1,5 +1,7 @@
 #! /bin/bash
 
+. ~/til/bash/confirm
+
 [ $# -eq 0 ] && echo "Please supply a flyspray task number!" && exit 1
 
 
@@ -15,8 +17,17 @@ function switchBranch()
 switchBranch "$1"
 
 if [ $? -ne 0 ]; then
-	echo "Couldn't switch to the branch, attempting to create it instead."
-	powershell svn_branch.ps1 "$1"
+
+	echo -n "Couldn't switch to the branch, create it instead?"
+
+	Confirm
+
+	if [ $Confirm -eq 0 ]; then
+		powershell svn_branch.ps1 "$1"
+	else
+		echo "Aborting"
+		exit 1
+	fi
 
 	if [ $? -ne 0 ]; then
 		echo "Branch creation failed, something has gone horribly wrong."
