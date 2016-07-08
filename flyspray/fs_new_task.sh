@@ -21,14 +21,14 @@ function printHelp() {
 }
 
 function interactiveInput() {
-	fs_temp="~/.fspray.tmp"
-	touch $fs_temp
-	vim $fs_temp
+	fs_temp=~/.fspray.tmp
+	touch "$fs_temp"
+	vim "$fs_temp"
 
-	TASK_NAME=$(echo -n `head -n 1 $fs_temp` )
-	TASK_DESC=$(echo -n `tail -n +3 $fs_temp` )
+	TASK_NAME=$(head -n 1 "$fs_temp")
+	TASK_DESC=$(tail -n +3 "$fs_temp")
 
-	rm $fs_temp
+	rm "$fs_temp"
 
 	PARENT_ID="$2"
 	CREATE_DEPENDANT=$'--%#%#\r\nContent-Disposition: form-data; name="add_depend"\r\n\r\n'"$PARENT_ID"$'\r\n'
@@ -78,7 +78,7 @@ URL=$(curl --silent 'http://flyspray.excelsystems.com/flyspray/index.php?do=newt
 \
 -H 'Content-Type: multipart/form-data; boundary=%#%#' \
 \
---data-binary $'--%#%#\r\nContent-Disposition: form-data; name="item_summary"\r\n\r\n'"$TASK_NAME"$'\r\n
+--data-binary $'--%#%#\r\nContent-Disposition: form-data; name="item_summary"\r\n\r\n'"$TASK_NAME"$'\r
 --%#%#\r\nContent-Disposition: form-data; name="task_type"\r\n\r\n2\r
 --%#%#\r\nContent-Disposition: form-data; name="product_category"\r\n\r\n5\r
 --%#%#\r\nContent-Disposition: form-data; name="item_status"\r\n\r\n2\r
