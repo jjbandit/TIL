@@ -7,10 +7,17 @@
 
 function switchBranch()
 {
+	echo $(svn info | grep ^URL | awk -F\/ '{print $NF}' | sed 's/FS%20//') > ~/.svn_last_branch.tmp # Cache our current branch
+
 	if [ $1 = "trunk" ]; then
 		svn switch "http://svn.excelsystems.com/svn/websmart/websmart/trunk" 2> /dev/null
 	else
-		svn switch "http://svn.excelsystems.com/svn/websmart/websmart/branches/FS $1" 2> /dev/null
+
+		if [ $1 = "-" ]; then
+			svn_switch $(cat ~/.svn_last_branch.tmp)
+		else
+			svn switch "http://svn.excelsystems.com/svn/websmart/websmart/branches/FS $1" 2> /dev/null
+		fi
 	fi
 }
 
