@@ -2,9 +2,8 @@
 # of all source files (wrapped in quotes) then build our database from that.
 
 if [ ! -f cscope.list ]; then
-
-cpp_and_headers.sh > cscope.list
- 
+	cpp_and_headers.sh > cscope.list
 fi
 
 cscope -b -i cscope.list
+rm cscope.list
