@@ -10,7 +10,8 @@ filesToRevert=$(svn st -q | \
 # If there are some files that have changes try to revert just those
 if [ -n "$filesToRevert" ]; then
 	echo "Found Changes to revert"
-	svn revert $filesToRevert
+	echo $filesToRevert
+	echo $filesToRevert | xargs svn revert
 else
 	echo "No Changes to revert"
 	exit 0
