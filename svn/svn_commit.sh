@@ -1,8 +1,15 @@
 #! /bin/bash
 
-echo "" > ./svn-commit.tmp
-echo "" >> ./svn-commit.tmp
-echo "Task: $(svn_current_branch.sh)" >> ./svn-commit.tmp
+# Write some preformatted text out to the commit file
+echo "
+
+
+Task: $(svn_current_branch.sh)
+
+# Lines beginning with '#' will be removed by my preprocessor
+#
+$(svn di --summarize | sed "s/.*/#   &/")" > ./svn-commit.tmp
+
 
 vim ./svn-commit.tmp
 
@@ -25,5 +32,12 @@ else
 	exit 1
 fi
 
+# Strip the comment lines
+sed -i "/^#.*/ d" ./svn-commit.tmp
+
 echo "Committing"
+echo "----"
+cat ./svn-commit.tmp
+echo "----"
+
 svn commit -F ./svn-commit.tmp
