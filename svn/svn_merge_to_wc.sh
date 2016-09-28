@@ -17,4 +17,4 @@ wc_head=$(svn info | grep "Revision" | cut -d" " -f2)
 
 echo "Working Copy is at: $wc_head"
 
-svn merge --ignore-ancestry -r$from_rev:$wc_head "$branch_path"
+svn merge --ignore-ancestry -r$from_rev:$wc_head "$branch_path" && svn_commit.sh $1
