@@ -4,6 +4,8 @@
 
 [ $# -eq 0 ] && echo "Please supply a flyspray task number!" && exit 1
 
+svn info > /dev/null 2>&1
+[ $? -ne 0 ] && echo "Not a Subversion working copy, exiting." && exit 1
 
 function switchBranch()
 {
@@ -20,6 +22,8 @@ function switchBranch()
 		fi
 	fi
 }
+
+### Main
 
 switchBranch "$1"
 
@@ -44,3 +48,6 @@ if [ $? -ne 0 ]; then
 	fi
 
 fi
+
+# Finally, whatever the result, update the branch we're currently on
+svn info | grep "Relative URL" | rev | cut -c -5 | rev > ./.current_branch
