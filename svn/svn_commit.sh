@@ -7,7 +7,7 @@ else
 fi
 
 if [ -e ./svn-commit.tmp ]; then
-	# Something probably went wrong during a previous attempt
+	echo 'Recovering from svn-commit.tmp'
 else
 
 	# Write some preformatted text out to a fresh commit file
@@ -33,14 +33,14 @@ TaskKeywordCount=$( echo "$Message" | grep "Task" | wc -c )
 FirstLineCharCount=$( echo "$Message" | head -n 1 | wc -c )
 
 if [ $FirstLineCharCount -gt 1 ]; then
-	# echo "Message Line Count validated!!"
+	echo "Message Line Count validated!!"
 else
 	echo "You need to enter a commit message"
 	exit 1
 fi
 
 if [ $TaskKeywordCount -gt 1 ]; then
-	# echo "Task Keyword Validated!"
+	echo "Task Keyword Validated!"
 else
 	echo "You need to enter a task number"
 	exit 1
