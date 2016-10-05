@@ -11,22 +11,18 @@ if [ -e ./svn-commit.tmp ]; then
 else
 
 	# Write some preformatted text out to a fresh commit file
-	echo "
+echo "
 
+Task: $BranchNumber
+--This line, and those below, will be ignored--
+$( svn di )
+" > ./svn-commit.tmp
 
-	Task: $BranchNumber
-
-	# Lines beginning with '#' will be removed by my preprocessor
-	#
-	$(svn di | sed "s/.*/#   &/")" > ./svn-commit.tmp
 
 fi
 
 # Get some user input
 vim ./svn-commit.tmp
-
-# Strip comment lines
-sed -i "/^#.*/ d" ./svn-commit.tmp
 
 Message=$( cat ./svn-commit.tmp )
 TaskKeywordCount=$( echo "$Message" | grep "Task" | wc -c )
