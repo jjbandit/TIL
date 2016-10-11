@@ -11,7 +11,7 @@ filesToRevert=$(svn st -q | \
 if [ -n "$filesToRevert" ]; then
 	echo "Found Changes to revert"
 	echo $filesToRevert
-	echo $filesToRevert | xargs svn revert
+	echo "$filesToRevert" | xargs svn revert
 else
 	echo "No Changes to revert"
 	exit 0
