@@ -20,6 +20,7 @@ function BuildLastTargets() {
 }
 
 TARGETS=""
+LAUNCH="N"
 
 TESTER="UnitTester/UnitTester.sln"
 ILE="WebSmart ILE Only.sln"
@@ -36,18 +37,19 @@ fi
 if [ "$UNICODE" == "" ]
 then
 	echo "Unicode target not found"
+
 	exit 1
 fi
-
-# Run the last build target if we don't pass in an argument
-[ $# -lt 1 ] && BuildLastTargets
-
 
 while [[ $# > 0 ]]
 do
 	arg="$1"
 
 	case $arg in
+		-l|--launch)
+			LAUNCH="Y"
+			break
+			;;
 		-u|--unicode)
 			TARGETS="$UNICODE"
 			break
@@ -73,8 +75,14 @@ trap CancelBuild INT
 
 if [ "$TARGETS" = "" ]; then
 
-	echo "No target found, exiting."
-	exit 1
+	# Run the last build target if we didn't find one
+	BuildLastTargets
+
+	# Something's not right ..
+	if [ "$TARGETS" = "" ]; then
+		echo "No target found, exiting."
+		exit 1
+	fi
 fi
 
 echo $TARGETS | tee ~/.last_build
@@ -85,3 +93,8 @@ sed 's/\\/\//g' | \
 sed 's/[0-9]>\s*//g' | \
 sed 's/c:\/users\/jhughes/\n\n~/g' | \
 sed -e "s/error C[0-9]\+:\s*/\\n/"
+
+if [ $LAUNCH == "Y" ]; then
+	echo "Launching $TARGETS"
+	devenv.com "$TARGETS" /runexit
+fi
