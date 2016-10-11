@@ -6,7 +6,7 @@ else
 	BranchNumber="$1"
 fi
 
-if [ -e ./svn-commit.tmp ]; then
+if [ -e ./.svn-commit.tmp ]; then
 	echo 'Recovering from svn-commit.tmp'
 else
 
@@ -18,15 +18,15 @@ Task: $BranchNumber
 ### This line, and those below, will be removed by my preprocessor ###
 
 $( svn di )
-" > ./svn-commit.tmp
+" > ./.svn-commit.tmp
 
 
 fi
 
 # Get some user input
-vim ./svn-commit.tmp
+vim ./.svn-commit.tmp
 
-Message=$( cat ./svn-commit.tmp )
+Message=$( cat ./.svn-commit.tmp )
 TaskKeywordCount=$( echo "$Message" | grep "Task" | wc -c )
 FirstLineCharCount=$( echo "$Message" | head -n 1 | wc -c )
 
@@ -45,17 +45,17 @@ else
 fi
 
 # Delete temp commit text
-sed -i '/###.*###$/,$d' ./svn-commit.tmp
+sed -i '/###.*###$/,$d' ./.svn-commit.tmp
 
 echo "Committing"
-echo " ----"
-cat ./svn-commit.tmp
-echo " ----"
+echo " -----------------------------------------------------------------------"
+cat ./.svn-commit.tmp
+echo " -----------------------------------------------------------------------"
 
-svn commit -F ./svn-commit.tmp
+svn commit -F ./.svn-commit.tmp
 
 if [ $? -eq 0 ]; then  # commit went well
-	rm ./svn-commit.tmp  # cleanup our temp file
+	rm ./.svn-commit.tmp  # cleanup our temp file
 else
 	echo "Something went wrong while committing, aborting"
 	echo "Run svn_commit.sh to retry with the same temp file"
