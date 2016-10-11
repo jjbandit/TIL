@@ -14,7 +14,9 @@ else
 echo "
 
 Task: $BranchNumber
---This line, and those below, will be ignored--
+
+### This line, and those below, will be removed by my preprocessor ###
+
 $( svn di )
 " > ./svn-commit.tmp
 
@@ -41,6 +43,9 @@ else
 	echo "You need to enter a task number"
 	exit 1
 fi
+
+# Delete temp commit text
+sed -i '/###.*###$/,$d' ./svn-commit.tmp
 
 echo "Committing"
 echo " ----"
