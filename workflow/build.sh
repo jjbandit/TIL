@@ -2,7 +2,7 @@
 
 function CancelBuild() {
 	echo "Cancelling build."
-	taskkill.exe /im msbuild.exe /f /t
+	taskkill.exe /im msbuild.exe /F /t
 }
 
 
