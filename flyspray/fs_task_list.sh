@@ -29,7 +29,13 @@ TASK_HTML=$(http --follow GET http://flyspray.excelsystems.com/flyspray/ \
 	reported[0]==
 )
 
-TASK_LIST=$( echo "$TASK_HTML" \
+TASK_SEVERITY=$( echo "$TASK_HTML" \
+	| grep -Po "task_severity.*?/td>" \
+	| grep -Po ">.*<" \
+	| sed -e 's/[<>]//g'
+)
+
+TASK_NAMES=$( echo "$TASK_HTML" \
 	| grep -Po "task_summary.*?/td>" \
 	| grep -o "title.*\/a>" \
 	| grep -Po ">.*<" \
@@ -45,9 +51,10 @@ TASK_IDS=$( echo "$TASK_IDS" \
 	| sed 's/.*/ '$(echo -e "\033[32m")'\0'$(echo -e "\033[37m")'/g'
 )
 
-echo -e "$TASK_LIST" > ./tasklist
-echo -e "$TASK_IDS" > ./taskids
+echo -e "$TASK_NAMES" > ./task_names
+echo -e "$TASK_SEVERITY"   > ./task_severity
+echo -e "$TASK_IDS"   > ./task_ids
 
-paste ./taskids ./tasklist
+paste -d " 	" ./task_ids ./task_severity ./task_names
 
-rm ./taskids ./tasklist
+rm ./task_ids ./task_severity ./task_names
