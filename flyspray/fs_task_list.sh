@@ -29,10 +29,22 @@ TASK_HTML=$(http --follow GET http://flyspray.excelsystems.com/flyspray/ \
 	reported[0]==
 )
 
+TASK_STATUS=$( echo "$TASK_HTML" \
+	| grep -Po "task_status.*?/td>" \
+	| grep -Po ">.*<" \
+	| sed -e 's/[<>]//g' \
+	| sed -e 's/PCR\/QA Complete/YAY!/g' \
+	| sed -e 's/Request for Comment/RFC/g' \
+	| sed -e 's/Assigned/Assign/g' \
+	| sed -e 's/.*/\0	/g'
+)
+
 TASK_SEVERITY=$( echo "$TASK_HTML" \
 	| grep -Po "task_severity.*?/td>" \
 	| grep -Po ">.*<" \
-	| sed -e 's/[<>]//g'
+	| sed -e 's/[<>]//g' \
+	| sed -e 's/Very Low/VL/g' \
+	| sed -e 's/.*/\0	/g'
 )
 
 TASK_NAMES=$( echo "$TASK_HTML" \
@@ -51,10 +63,12 @@ TASK_IDS=$( echo "$TASK_IDS" \
 	| sed 's/.*/ '$(echo -e "\033[32m")'\0'$(echo -e "\033[37m")'/g'
 )
 
-echo -e "$TASK_NAMES" > ./task_names
-echo -e "$TASK_SEVERITY"   > ./task_severity
-echo -e "$TASK_IDS"   > ./task_ids
+echo -e "$TASK_NAMES"     > ./task_names
+echo -e "$TASK_SEVERITY"  > ./task_severity
+echo -e "$TASK_STATUS"    > ./task_status
+echo -e "$TASK_IDS"       > ./task_ids
 
-paste -d " 	" ./task_ids ./task_severity ./task_names
+paste -d "|" ./task_ids ./task_severity ./task_status ./task_names \
+	| sed 's/|/  |  /g'
 
-rm ./task_ids ./task_severity ./task_names
+rm ./task_ids ./task_severity ./task_status ./task_names
