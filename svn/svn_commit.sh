@@ -52,7 +52,7 @@ echo " -----------------------------------------------------------------------"
 cat ./.svn-commit.tmp
 echo " -----------------------------------------------------------------------"
 
-svn commit -F ./.svn-commit.tmp
+svn commit -F ./.svn-commit.tmp && svn update
 
 if [ $? -eq 0 ]; then  # commit went well
 	rm ./.svn-commit.tmp  # cleanup our temp file
