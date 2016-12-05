@@ -1,0 +1,17 @@
+# Create a save file
+
+First, you have to create a save file
+
+$> CRTSAVF FILE(NX_67/NXLOGINFIX)
+
+Then pack whatever file(s) you want to save
+
+$> SAVOBJ OBJ(NXLOGIN) LIB(NX_67) DEV(*SAVF) SAVF(NX_67/NXLOGINFIX) TGTRLS(V7R1M0)
+
+
+# Unpack said save file with
+
+$> RSTOBJ OBJ(NXLOGIN) SAVLIB(NX_67) DEV(*SAVF) SAVF(SAVE_FILE_LIBRARY/NXLOGINFIX) RSTLIB(CLIENT_NEXUS_INSTALL_LIBRARY)
+
+where SAVE_FILE_LIBRARY == the library that the save file sits in
+and CLIENT_NEXUS_INSTALL_LIBRARY is where the packed file will be un-packed to
