@@ -1,8 +1,13 @@
 #! /bin/bash
 
+. ~/til/svn/svn_wc_base_url.sh
+
 [ $# -eq 0 ] && echo "Please pass at least a target branch number" && exit 1
 
-# 
+svn info > /dev/null 2>&1
+
+[ $? -ne 0 ] && echo "Not a valid svn working copy, exiting" && exit 1
+
 BranchNumber=$1
 
 # The target we're branching from defaults to trunk, or the second parameter passed in
@@ -18,20 +23,15 @@ else
 	fi
 fi
 
-echo $BranchFrom
-echo $BranchNumber
+# This sets a variable called SvnWcBaseUrl
+GetWcBaseUrl
 
+FromUrl="$SvnWcBaseUrl$BranchFrom"
 
-
-SvnBaseUrl=$(svn info | grep --color=never ^URL: | grep --color=never "[^ ]*svn[^ ]*/" -o)
-
-
-FromUrl="$SvnBaseUrl$BranchFrom"
-
-TargetUrl="$SvnBaseUrl""branches/FS $BranchNumber"
+TargetUrl="$SvnWcBaseUrl""branches/FS $BranchNumber"
 
 # Check if branch exists
-svn ls "$TargetUrl" 2>&1> /dev/null
+svn ls "$TargetUrl" > /dev/null 2>&1
 
 # Create remote branch if it doesn't exist
 if [ $? -ne 0 ]; then

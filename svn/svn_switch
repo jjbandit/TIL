@@ -2,6 +2,8 @@
 
 . ~/til/bash/confirm
 
+. ~/til/svn/svn_wc_base_url.sh
+
 [ $# -eq 0 ] && echo "Please supply a flyspray task number!" && exit 1
 
 svn info > /dev/null 2>&1
@@ -9,13 +11,16 @@ svn info > /dev/null 2>&1
 
 function switchBranch()
 {
+	# This sets a variable called SvnWcBaseUrl
+	GetWcBaseUrl
+
 	if [ $1 = "trunk" ]; then
-		svn switch "http://svn.excelsystems.com/svn/websmart/websmart/trunk" 2> /dev/null
+		svn switch "$SvnWcBaseUrl""trunk" 2> /dev/null
 	else
 		if [ $1 = "-" ]; then
 			svn_switch $(cat ~/.svn_last_branch.tmp)
 		else
-			svn switch "http://svn.excelsystems.com/svn/websmart/websmart/branches/FS $1"
+			svn switch "$SvnWcBaseUrl""branches/FS $1"
 		fi
 	fi
 }
