@@ -33,7 +33,7 @@ if [ $? -ne 0 ]; then
 	Confirm
 
 	if [ $Confirm -eq 0 ]; then  # We decided to create a new branch
-		powershell svn_branch.ps1 "$1"
+		svn_branch.sh "$1"
 	else
 		echo "Aborting"
 		exit 1

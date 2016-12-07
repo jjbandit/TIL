@@ -40,6 +40,6 @@ isGitRepo=$(git rev-parse --is-inside-work-tree > /dev/null 2>&1)
 
 TASK_ID=$(fs_new_task.sh "$TASK_NAME" "$TASK_DESC" "$PARENT_ID" )
 
-powershell svn_branch "$TASK_ID"
+svn_branch.sh "$TASK_ID"
 
 ~/til/git_svn/git_svn_track_remote_svn_branch.sh "$TASK_ID" > /dev/null
