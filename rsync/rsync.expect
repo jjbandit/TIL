@@ -1,0 +1,10 @@
+set password [lindex $argv 0]
+set local_asset [lindex $argv 1]
+set remote_asset [lindex $argv 2]
+
+spawn rsync --del -vr -e ssh $local_asset dev.excelsystems.com:$remote_asset
+
+expect "password:"
+send "$password\n"
+
+expect EOF
