@@ -2,7 +2,7 @@
 
 function CancelBuild() {
 	echo "Cancelling build."
-	taskkill.exe /im msbuild.exe /F /t
+	taskkill.exe /im msbuild.exe /F /T
 }
 
 
@@ -10,7 +10,7 @@ function BuildLastTargets() {
 	echo "Running the last build configuration."
 
 	if [ -f ~/.last_build ]; then
-		TARGETS=$(cat ~/.last_build)
+		BuildTargets=$(cat ~/.last_build)
 
 	else
 		echo "No previous build target found, exiting."
@@ -19,8 +19,9 @@ function BuildLastTargets() {
 	fi
 }
 
-TARGETS=""
-LAUNCH="N"
+BuildTargets=""
+SlnPath="./"
+LAUNCH=0
 
 TESTER="UnitTester/UnitTester.sln"
 ILE="WebSmart ILE Only.sln"
@@ -44,57 +45,62 @@ fi
 while [[ $# > 0 ]]
 do
 	arg="$1"
+	echo "$#"
+	echo "$arg"
 
 	case $arg in
 		-l|--launch)
-			LAUNCH="Y"
-			break
+			LAUNCH=1
 			;;
 		-u|--unicode)
-			TARGETS="$UNICODE"
-			break
+			BuildTargets="$UNICODE"
 			;;
 		-t|--tests)
-			TARGETS="$TESTER"
-			break
+			BuildTargets="$TESTER"
 			;;
 		-i|--ile)
-			TARGETS="$ILE"
-			break
+			BuildTargets="$ILE"
 			;;
 		-a|--all)
-			TARGETS="$ALL"
-			break
+			BuildTargets="$ALL"
+			;;
+		*)
+			SlnPath="$arg"
 			;;
 	esac
 
 	shift
 done
 
+echo "Done Parsing args"
+
 trap CancelBuild INT
 
-if [ "$TARGETS" = "" ]; then
+if [ "$BuildTargets" = "" ]; then
 
 	# Run the last build target if we didn't find one
 	BuildLastTargets
 
-	# Something's not right ..
-	if [ "$TARGETS" = "" ]; then
+	if [ "$BuildTargets" = "" ]; then # Something's not right ..
 		echo "No target found, exiting."
 		exit 1
 	fi
 fi
 
-echo $TARGETS | tee ~/.last_build
+echo $BuildTargets > ~/.last_build
 
-devenv.com "$TARGETS" /build  | \
+FullBuildPath="$SlnPath/$BuildTargets"
+
+echo "Building $FullBuildPath"
+
+devenv.com "$FullBuildPath" /build  | \
 tee /dev/tty | \
 sed 's/\\/\//g' | \
 sed 's/[0-9]>\s*//g' | \
 sed 's/c:\/users\/jhughes/\n\n~/g' | \
 sed -e "s/error C[0-9]\+:\s*/\\n/"
 
-if [ $LAUNCH == "Y" ]; then
-	echo "Launching $TARGETS"
-	devenv.com "$TARGETS" /runexit
+if [ $LAUNCH == 1 ]; then
+	echo "Launching $BuildTargets"
+	devenv.com "$FullBuildPath" /runexit
 fi
