@@ -26,7 +26,9 @@ TASK_HTML=$(http --follow GET http://flyspray.excelsystems.com/flyspray/ \
 	status[11]==9 \
 	percent[0]== \
 	search_in_details==1 \
-	reported[0]==
+	reported[0]== \
+	order==lastedit \
+	sort==desc
 )
 
 TASK_STATUS=$( echo "$TASK_HTML" \

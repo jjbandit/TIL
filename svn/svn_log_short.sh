@@ -1,6 +1,6 @@
 #! /bin/bash
 
-LOG=$(svn log --stop-on-copy -l 40 \
+LOG=$(svn log --stop-on-copy -l 40 "$@" \
 	| grep -A 2 "^r[0-9]\+" \
 	| sed -n '1~2p' \
 )

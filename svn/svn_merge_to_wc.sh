@@ -7,7 +7,9 @@ if [[ $# -eq 0 ]]; then
 	exit 1
 fi
 
-branch_path=^/websmart/branches/FS\ $1
+project=$(svn info | grep --color=never Relative | grep -o "\^/\w*\?/" | sed 's/[/^]//g')
+
+branch_path=^/$project/branches/FS\ $1
 
 from_rev=$(svn log --stop-on-copy "$branch_path" | grep -P "^r\d\d+" | cut -d" " -f 1 | tail -n 1 | sed 's/r//')
 
