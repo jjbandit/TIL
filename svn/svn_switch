@@ -15,12 +15,12 @@ function switchBranch()
 	GetWcBaseUrl
 
 	if [ $1 = "trunk" ]; then
-		svn switch "$SvnWcBaseUrl""trunk" 2> /dev/null
+		svn switch "$SvnWcBaseUrl/trunk" 2> /dev/null
 	else
 		if [ $1 = "-" ]; then
 			svn_switch $(cat ~/.svn_last_branch.tmp)
 		else
-			svn switch "$SvnWcBaseUrl""branches/FS $1"
+			svn switch "$SvnWcBaseUrl/branches/FS%20$1"
 		fi
 	fi
 }

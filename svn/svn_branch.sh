@@ -5,7 +5,6 @@
 [ $# -eq 0 ] && echo "Please pass at least a target branch number" && exit 1
 
 svn info > /dev/null 2>&1
-
 [ $? -ne 0 ] && echo "Not a valid svn working copy, exiting" && exit 1
 
 BranchNumber=$1
@@ -26,9 +25,9 @@ fi
 # This sets a variable called SvnWcBaseUrl
 GetWcBaseUrl
 
-FromUrl="$SvnWcBaseUrl$BranchFrom"
+FromUrl="$SvnWcBaseUrl/$BranchFrom"
 
-TargetUrl="$SvnWcBaseUrl""branches/FS $BranchNumber"
+TargetUrl="$SvnWcBaseUrl/branches/FS $BranchNumber"
 
 # Check if branch exists
 svn ls "$TargetUrl" > /dev/null 2>&1
