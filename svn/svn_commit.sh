@@ -6,8 +6,8 @@ else
 	BranchNumber="$1"
 fi
 
-if [ -e ./.svn-commit.tmp ]; then
-	echo 'Recovering from svn-commit.tmp'
+if [ -e ./.tmp_commit ]; then
+	echo 'Recovering from .tmp_commit'
 else
 
 	# Write some preformatted text out to a fresh commit file
@@ -18,15 +18,15 @@ Task: $BranchNumber
 ### This line, and those below, will be removed by my preprocessor ###
 
 $( svn di )
-" > ./.svn-commit.tmp
+" > ./.tmp_commit
 
 
 fi
 
 # Get some user input
-vim ./.svn-commit.tmp
+vim ./.tmp_commit
 
-Message=$( cat ./.svn-commit.tmp )
+Message=$( cat ./.tmp_commit )
 TaskKeywordCount=$( echo "$Message" | grep "Task" | wc -c )
 FirstLineCharCount=$( echo "$Message" | head -n 1 | wc -c )
 
@@ -34,6 +34,7 @@ if [ $FirstLineCharCount -gt 1 ]; then
 	echo "Message Line Count validated!!"
 else
 	echo "You need to enter a commit message"
+	rm ./.tmp_commit
 	exit 1
 fi
 
@@ -45,17 +46,17 @@ else
 fi
 
 # Delete temp commit text
-sed -i '/###.*###$/,$d' ./.svn-commit.tmp
+sed -i '/###.*###$/,$d' ./.tmp_commit
 
 echo "Committing"
 echo " -----------------------------------------------------------------------"
-cat ./.svn-commit.tmp
+cat ./.tmp_commit
 echo " -----------------------------------------------------------------------"
 
-svn commit -F ./.svn-commit.tmp && svn update
+svn commit -F ./.tmp_commit && svn update
 
 if [ $? -eq 0 ]; then  # commit went well
-	rm ./.svn-commit.tmp  # cleanup our temp file
+	rm ./.tmp_commit  # cleanup our temp file
 else
 	echo "Something went wrong while committing, aborting"
 	echo "Run svn_commit.sh to retry with the same temp file"
