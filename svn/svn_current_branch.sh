@@ -1,3 +1,3 @@
 #! /bin/bash
 
-echo $(svn info | grep "Relative URL" | rev | cut -c -5 | rev)
+echo $(svn info | grep -P "^URL:" | grep -Po "\d+" | rev | cut -c -5 | rev)
