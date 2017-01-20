@@ -30,6 +30,11 @@ LOG=$(svn log --stop-on-copy -l 40 $TargetUrl "$@" \
 	| sed -n '1~2p' \
 )
 
+TASK=$(svn log --stop-on-copy -l 40 $TargetUrl "$@" \
+	| grep -Po "Task: \d+" \
+	| cut -d" " -f 2
+	)
+
 REV=$(echo "$LOG" \
 	| cut -d"|" -f 1 \
 	| sed -n '1~2p' \
@@ -56,11 +61,16 @@ if [ "$1" != "--nocolor" ]; then
 	USER=$(echo "$USER" \
 	| sed -e 's/.*/ '$(echo -e "\033[32m")'\0'$(echo -e "\033[37m")'	/'
 	)
+
+	TASK=$(echo "$TASK" \
+	| sed -e 's/.*/ '$(echo -e "\033[32m")'\0'$(echo -e "\033[37m")'	/'
+	)
 fi
 
+echo -e "$TASK"     > .task
 echo -e "$REV"      > .rev
 echo -e "$USER"     > .user
 echo -e "$MESSAGE"  > .message
 
-paste -d " " .rev .user .message \
+paste -d " " .task .rev .user .message \
 	| sed 's/\s\{2,\}/  |  /g'
