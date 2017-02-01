@@ -1,9 +1,9 @@
 #! /bin/bash
 
+LOG_LENGTH=20
+
 svn info > /dev/null 2>&1
 [ $? -ne 0 ] && echo "Not a valid svn working copy, exiting" && exit 1
-
-. ~/til/svn/svn_wc_base_url.sh
 
 if [ $# -eq 0 ]; then
 	BranchNumber="$(svn_current_branch.sh)"
@@ -12,25 +12,39 @@ else
 	shift
 fi
 
-# This sets a variable called SvnWcBaseUrl
-GetWcBaseUrl
 
-if [ $BranchNumber = "trunk" ]; then
+SvnTarget=$(svn info | grep --color=never -P "^URL:" | grep --color=never -Po "(sprints|trunk|tags)")
+
+SvnWcBaseUrl=$(svn_wc_base_url.sh)
+
+if [ "$SvnTarget" == "trunk" ]; then
 	TargetUrl="$SvnWcBaseUrl/trunk"
 
 else
-	TargetUrl="$SvnWcBaseUrl/branches/FS%20$BranchNumber"
+		if [ "$SvnTarget" == "sprints" ]; then
+		TargetUrl="$SvnWcBaseUrl/$BranchNumber"
+
+		else
+			if [ "$SvnTarget" == "tags" ]; then
+				TargetUrl="$SvnWcBaseUrl/$BranchNumber"
+
+			else
+				TargetUrl="$SvnWcBaseUrl/branches/FS%20$BranchNumber"
+			fi
+
+		fi
 fi
 
+echo "
+$TargetUrl
+"
 
-echo "$TargetUrl"
-
-LOG=$(svn log --stop-on-copy -l 40 $TargetUrl "$@" \
+LOG=$(svn log -l $LOG_LENGTH "$TargetUrl" "$@" \
 	| grep -A 2 "^r[0-9]\+" \
 	| sed -n '1~2p' \
 )
 
-TASK=$(svn log --stop-on-copy -l 40 $TargetUrl "$@" \
+TASK=$(svn log -l $LOG_LENGTH "$TargetUrl" "$@" \
 	| grep -Po "Task: \d+" \
 	| cut -d" " -f 2
 	)
@@ -74,3 +88,5 @@ echo -e "$MESSAGE"  > .message
 
 paste -d " " .task .rev .user .message \
 	| sed 's/\s\{2,\}/  |  /g'
+
+rm .task .rev .user .message

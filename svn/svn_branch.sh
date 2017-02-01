@@ -1,7 +1,5 @@
 #! /bin/bash
 
-. ~/til/svn/svn_wc_base_url.sh
-
 [ $# -eq 0 ] && echo "Please pass at least a target branch number" && exit 1
 
 svn info > /dev/null 2>&1
@@ -22,8 +20,7 @@ else
 	fi
 fi
 
-# This sets a variable called SvnWcBaseUrl
-GetWcBaseUrl
+SvnWcBaseUrl=$(svn_wc_base_url.sh)
 
 FromUrl="$SvnWcBaseUrl/$BranchFrom"
 

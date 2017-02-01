@@ -11,8 +11,7 @@ svn info > /dev/null 2>&1
 
 function switchBranch()
 {
-	# This sets a variable called SvnWcBaseUrl
-	GetWcBaseUrl
+	SvnWcBaseUrl=$(svn_wc_base_url.sh)
 
 	if [ $1 = "trunk" ]; then
 		svn switch "$SvnWcBaseUrl/trunk" 2> /dev/null
@@ -29,6 +28,8 @@ function switchBranch()
 
 LastBranch=$(svn_current_branch.sh)
 
+IsNexusEnv=$( pwd | grep "nexus" | wc -c)
+
 switchBranch "$1"
 
 if [ $? -ne 0 ]; then
@@ -38,7 +39,11 @@ if [ $? -ne 0 ]; then
 	Confirm
 
 	if [ $Confirm -eq 0 ]; then  # We decided to create a new branch
-		svn_branch.sh "$1"
+		if [ $IsNexusEnv -gt 0 ]; then
+			powershell "~/nexus/utils/createenv/trunk/CreateEnv.ps1"
+		else
+			svn_branch.sh "$1"
+		fi
 	else
 		echo "Aborting"
 		exit 1

@@ -102,5 +102,5 @@ sed -e "s/error C[0-9]\+:\s*/\\n/"
 
 if [ $LAUNCH == 1 ]; then
 	echo "Launching $BuildTargets"
-	devenv.com "$FullBuildPath" /runexit
+	devenv.com "$FullBuildPath"
 fi
