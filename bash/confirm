@@ -2,7 +2,7 @@
 
 
 function Confirm {
-	echo " (y|n)"
+	echo -n " (y|n) "
 
 	read
 

@@ -1,5 +1,8 @@
 #! /bin/bash
 
+svn info > /dev/null 2>&1
+[ $? -ne 0 ] && echo "Not a Subversion working copy, exiting." && exit 1
+
 # Svn doesn't have a useful builtin diff, so let's make one
 
 #  ONE MILLION LINES OF CONTEXT!

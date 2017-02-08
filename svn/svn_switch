@@ -9,6 +9,12 @@
 svn info > /dev/null 2>&1
 [ $? -ne 0 ] && echo "Not a Subversion working copy, exiting." && exit 1
 
+BRANCH_NUMBER="$1"
+
+if [ "$BRANCH_NUMBER" = "-" ]; then
+	BRANCH_NUMBER=$(cat ~/.svn_last_branch.tmp)
+fi
+
 function switchBranch()
 {
 	SvnWcBaseUrl=$(svn_wc_base_url.sh)
@@ -16,11 +22,7 @@ function switchBranch()
 	if [ $1 = "trunk" ]; then
 		svn switch "$SvnWcBaseUrl/trunk" 2> /dev/null
 	else
-		if [ $1 = "-" ]; then
-			svn_switch $(cat ~/.svn_last_branch.tmp)
-		else
-			svn switch "$SvnWcBaseUrl/branches/FS%20$1"
-		fi
+		svn switch "$SvnWcBaseUrl/branches/FS%20$1"
 	fi
 }
 
@@ -30,35 +32,37 @@ LastBranch=$(svn_current_branch.sh)
 
 IsNexusEnv=$( pwd | grep "nexus" | wc -c)
 
-switchBranch "$1"
+switchBranch "$BRANCH_NUMBER"
+
 
 if [ $? -ne 0 ]; then
 
+	echo ""
 	echo -n "Couldn't switch to the branch, create it instead?"
 
 	Confirm
 
 	if [ $Confirm -eq 0 ]; then  # We decided to create a new branch
-		if [ $IsNexusEnv -gt 0 ]; then
-			powershell "~/nexus/utils/createenv/trunk/CreateEnv.ps1"
-		else
-			svn_branch.sh "$1"
-		fi
+		svn_branch.sh "$BRANCH_NUMBER"
+
 	else
-		echo "Aborting"
-		exit 1
+		echo "Exiting" && exit 1
 	fi
 
 	if [ $? -ne 0 ]; then  # Branch creation failed
 		echo "Branch creation failed, something has gone horribly wrong."
 		exit 1
 	else  # We created a new branch and are switching to it
-		switchBranch "$1"
+		switchBranch "$BRANCH_NUMBER"
 		echo $LastBranch > ~/.svn_last_branch.tmp
+
+		# Do some busywork for nexus environments
+		[ $IsNexusEnv -gt 0 ] && ~/til/nexus/createEnv.sh "$BRANCH_NUMBER"
 	fi
 else  # we sucessfully switched, write the last branch number out
 		echo $LastBranch > ~/.svn_last_branch.tmp
 fi
+
 
 # Finally, whatever the result, update the branch we're currently on
 svn info | grep "Relative URL" | rev | cut -c -5 | rev > ./.current_branch
