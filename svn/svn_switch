@@ -1,5 +1,8 @@
 #! /bin/bash
 
+# If you know you're creating a new branch, you can pass a second argument to
+# as a target to branch from
+
 . ~/til/bash/confirm
 
 . ~/til/svn/svn_wc_base_url.sh
@@ -43,7 +46,7 @@ if [ $? -ne 0 ]; then
 	Confirm
 
 	if [ $Confirm -eq 0 ]; then  # We decided to create a new branch
-		svn_branch.sh "$BRANCH_NUMBER"
+		svn_branch.sh "$BRANCH_NUMBER" "$2"
 
 	else
 		echo "Exiting" && exit 1
