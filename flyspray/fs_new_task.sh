@@ -5,17 +5,14 @@
 # line just below the notifyme field.
 
 function printHelp() {
-	echo "  -----------------------------------------------------"
-	echo ""
-	echo "  Usage: fs_new_task.sh <Title> [Description] [Parent ID]"
-	echo ""
-	echo "    Required: Arg 1 specifies the task title."
-	echo ""
-	echo "    Optional: Arg 2 specifies the task description."
-	echo ""
-	echo "    Optional: Arg 3 specifies what task to use as the new tasks parent."
-	echo ""
-	echo "  -----------------------------------------------------"
+	echo "
+	fs_new_task.sh <Title> [Description] [Parent ID]
+
+  -----------------------------------------------------------------------------
+	  Required: <Title>
+	  Optional: [Description]
+	  Optional: [Parent ID] Task # to use as the new tasks parent
+  -----------------------------------------------------------------------------"
 
 	exit 0
 }

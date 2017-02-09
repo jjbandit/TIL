@@ -3,9 +3,27 @@
 # If you know you're creating a new branch, you can pass a second argument to
 # as a target to branch from
 
-. ~/til/bash/confirm
+function PrintHelp()
+{
+	echo "
+  svn_switch <To> [CreateTarget]
 
-. ~/til/svn/svn_wc_base_url.sh
+  -----------------------------------------------------------------------------
+    Required: <To> Branch to switch to.  Usually a flyspray number.
+
+    Optional: [CreateTarget] If a branch is created, where to create the branch
+            from.  Defaults to trunk.
+  -----------------------------------------------------------------------------"
+	exit 0
+}
+
+if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+	PrintHelp
+fi
+
+
+
+. ~/til/bash/confirm
 
 [ $# -eq 0 ] && echo "Please supply a flyspray task number!" && exit 1
 
