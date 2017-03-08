@@ -1,0 +1,39 @@
+CONFIG='MAIN'
+{
+	SERVER='dev.excelsystems.com';
+	IFSROOT='\\\\dev.excelsystems.com\\dev';
+	LIB='NX_WS10_2';
+	PORT='4015';
+	DESTLIB='NEXUSLIB'
+	{
+		SRCLIB='NX_TRK_SRC'
+		{
+
+			FILE='QSOURCE';
+			FILE='QCMPSRC';
+		}
+	}
+	DESTLIB='WEBSMARTLIB'
+	{
+		SRCLIB='NX_WS10_2'
+		{
+			FILE='PW_USRC';
+		}
+	}
+	DIR='IFS Files\\nexus'
+	{
+		SRC='\\esdi\\nexus\\nexus_trunk\\nexus\\*';
+	}
+	DIR='IFS Files\\Master_Set'
+	{
+		SRC='\\esdi\\nexus\\nexus_trunk\\Master_Set\\*';
+	}
+	DIR='IFS Files\\Master_Public_Set'
+	{
+		SRC='\\esdi\\nexus\\nexus_trunk\\Master_Public_Set\\*';
+	}
+	DIR='IFS Files\\nexuspublic'
+	{
+		SRC='\\esdi\\nexus\\nexus_trunk\\nexuspublic\\*';
+	}
+}
