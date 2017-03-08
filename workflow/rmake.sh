@@ -1,17 +1,40 @@
 #! /bin/bash
 
+
+
+
+WC=trunk
+
+#SOURCE_DIR="C:/users/jhughes/nexus/trunk/Development#PDWs"
+ SOURCE_DIR="C:/users/jhughes/nexus/$WC/Server#Source"
+
+	# $SOURCE_DIR/MainPage.cpp
+  # $SOURCE_DIR/menu.cpp
+  # $SOURCE_DIR/brdcrmb.cpp
+
+FILES="
+  $SOURCE_DIR/router/main.cpp
+"
+
+
+
+
+
+
+
 function DumpJobLogErrors()
 {
-	LinesOfContext=4
+	LinesOfContext=8
 	JobLogPath="$1"
 
 	Errors=$(cat "$JOB_LOG" | grep -P --color=always "(\".*\"|\'.*\')" -C $LinesOfContext )
-	[ $? -ne 0 ] && Errors=$(cat "$JOB_LOG" | grep -P --color=always "\s+Message.*$" -C $LinesOfContext )
+	[ "$Errors" == "" ] && Errors=$(cat "$JOB_LOG" | grep -P --color=always "Library.*not found." -C $LinesOfContext )
+	[ "$Errors" == "" ] && Errors=$(cat "$JOB_LOG" | grep -P --color=always "\s+Message.*$" -C $LinesOfContext )
 
 	echo "$Errors"
 }
 
-PROGRAM=~/websmart/svn/extended/websmart/remote_compiler/Program
+PROGRAM=~/ws/extended/websmart/remote_compiler/Program
 TEMP=$PROGRAM/Temp
 
 COMPILE_LISTING="$TEMP/Compile Listing.txt"
@@ -20,23 +43,15 @@ TRACEFILE="$PROGRAM/WebSmart Trace.txt"
 
 CompileErrors=0
 
-# SOURCE_DIR="C:/users/jhughes/nexus/trunk/Server#Source"
-SOURCE_DIR="C:/users/jhughes/nexus/trunk/Development#PDWs"
-
-FILES="
-	$SOURCE_DIR/nxdocsrch.pdw
-"
-
 COMPILE_TOKENS="
 PDF='MAIN'
 {
 	TOKENS='*'
 	{
-		LIB='NX$(svn_current_branch.sh)';
+		LIB='NX$(svn_current_branch.sh | sed 's/trunk/_TRK/')';
 	}
 }
 "
-
 
 echo "$COMPILE_TOKENS" > '/home/jhughes/nexus/trunk/Server Source/compile_tokens.txt'
 echo "$COMPILE_TOKENS" > '/home/jhughes/nexus/trunk/Server Source/router/compile_tokens.txt'
@@ -52,14 +67,14 @@ do
 	[ -e "$JOB_LOG" ]         && echo " - Status - Removing old Job Log"         && rm "$JOB_LOG"
 
 	$PROGRAM/UnitTester.exe \
-		-cp "$File"
+		-cc "$File"
 
 	echo " - Status - Websmart exitd with code $?"
 
 	Success=0
 
-	[ -e "$COMPILE_LISTING" ] && echo " - Status - Got Compile Listing" && Success=1 # ..?
-	[ -e "$JOB_LOG" ]         && echo " - Status - Got Job Log"         && Success=1
+	[ -e "$COMPILE_LISTING" ] && echo " - Status - Got Compile Listing $COMPILE_LISTING" && Success=1 # ..?
+	[ -e "$JOB_LOG" ]         && echo " - Status - Got Job Log $JOB_LOG"                 && Success=1
 
 
 	if [ $Success == 0 ]; then
