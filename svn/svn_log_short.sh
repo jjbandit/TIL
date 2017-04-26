@@ -2,6 +2,10 @@
 
 LOG_LENGTH=20
 
+. ~/til/svn/find_working_copy_root.sh
+
+FindWorkingCopyRoot
+
 svn info > /dev/null 2>&1
 [ $? -ne 0 ] && echo "Not a valid svn working copy, exiting" && exit 1
 
