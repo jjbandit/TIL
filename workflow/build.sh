@@ -45,8 +45,6 @@ fi
 while [[ $# > 0 ]]
 do
 	arg="$1"
-	echo "$#"
-	echo "$arg"
 
 	case $arg in
 		-l|--launch)

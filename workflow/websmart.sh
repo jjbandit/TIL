@@ -1,3 +1,3 @@
 #! /bin/bash
 
-build.sh --launch --all C:/Users/jhughes/websmart/svn/trunk
+build.sh --launch --all C:/Users/jhughes/ws/trunk

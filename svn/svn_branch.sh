@@ -32,9 +32,9 @@ svn ls "$TargetUrl" > /dev/null 2>&1
 # Create remote branch if it doesn't exist
 if [ $? -ne 0 ]; then
 
-	echo "Creating branch!"
+	echo "Creating branch $BranchNumber"
 	svn copy "$FromUrl" "$TargetUrl" -m "Checkout for FS $BranchNumber"
 else
 
-	echo "Branch exists, aborting."
+	echo "Branch $BranchNumber exists, aborting."
 fi

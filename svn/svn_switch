@@ -51,7 +51,7 @@ function switchBranch()
 
 LastBranch=$(svn_current_branch.sh)
 
-IsNexusEnv=$( pwd | grep "nexus" | wc -c)
+IsNexusEnv=$( svn info | grep "nexus" | wc -c)
 
 switchBranch "$BRANCH_NUMBER"
 
