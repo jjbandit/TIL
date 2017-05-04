@@ -77,8 +77,13 @@ if [ $? -ne 0 ]; then
 		switchBranch "$BRANCH_NUMBER"
 		echo $LastBranch > ~/.svn_last_branch.tmp
 
-		# Do some busywork for nexus environments
-		[ $IsNexusEnv -gt 0 ] && ~/til/nexus/createEnv.sh "$BRANCH_NUMBER"
+		echo ""
+		echo -n "Will you be compiling PDWs?"
+		Confirm
+		if [ $Confirm -eq 0 ]; then  # Do some busywork for nexus environments
+			[ $IsNexusEnv -gt 0 ] && ~/til/nexus/createEnv.sh "$BRANCH_NUMBER"
+		fi
+
 	fi
 else  # we sucessfully switched, write the last branch number out
 		echo $LastBranch > ~/.svn_last_branch.tmp
