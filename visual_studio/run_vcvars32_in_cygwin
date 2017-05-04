@@ -1,5 +1,4 @@
-So, you want to run devenv or cl from Cygwin.  Welp, it was a long and arduous
-process, but it is hookupable.  That's the technical term for pain-in-the-ass.
+So, you want to run devenv or cl from Cygwin.
 
 Okay, so Cygwin is pretty smart and will take all variables from the environment
 that it was launched in and magically provide them to bash, which is very useful
@@ -8,11 +7,12 @@ for this purpose, since vsvars32.bat basically just sets environment variables.
 So instead of launching from C:\tools\cygwin\bin\mintty.exe we're going to take
 a page from the Cygwin cookbook and launch it from a batch file.
 
-Cygwin ships with a default C:\tools\cygwin\Cygwin.bat, which you can add this:
+Cygwin ships with a default C:\tools\cygwin\Cygwin.bat, to which you can add this:
 
 call "%VS110COMNTOOLS%vsvars32.bat"
 
-line to.
+Substitute the toolchain(s) you care about; you can add more than one of these
+lines to add multiple versions of the toolchain.
 
 Note that %VS110COMNTOOLS% is a Windows environment variable that gets
 set to the root of the Visual Studio installation path, presumably when you
