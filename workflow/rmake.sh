@@ -3,7 +3,7 @@
 
 
 
-WC=trunk
+WC=xxxxx
 
 #SOURCE_DIR="C:/users/jhughes/nexus/trunk/Development#PDWs"
  SOURCE_DIR="C:/users/jhughes/nexus/$WC/Server#Source"
@@ -24,6 +24,7 @@ WC=trunk
   # $SOURCE_DIR/optionsmenu.cpp
   # $SOURCE_DIR/pagetester.cpp
   # $SOURCE_DIR/purge.cpp
+
 
 FILES="
   $SOURCE_DIR/router/main.cpp

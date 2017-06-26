@@ -52,8 +52,8 @@ if [ -d "$RcCheckout" ]; then
   svn_revert_all.sh
 fi
 
-
 # Checkout RC
+echo "Checking our $RC into $RcCheckout"
 svn checkout "$RcUrl" "$RcCheckout" > /dev/null
 
 # Build the installer

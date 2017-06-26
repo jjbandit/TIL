@@ -2,7 +2,7 @@
 
 function FindWorkingCopyRoot()
 {
-  if [ $(pwd) == "/" ]; then
+  if [ "$(pwd)" == "/" ]; then
     # Break out if we're at the filesystem root
     echo "Couldn't find working copy root"
 
