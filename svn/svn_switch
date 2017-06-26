@@ -91,4 +91,4 @@ fi
 
 
 # Finally, whatever the result, update the branch we're currently on
-svn info | grep "Relative URL" | rev | cut -c -5 | rev > ./.current_branch
+svn info | grep "Relative URL" | grep "FS%20.*$" -o | sed "s/FS%20//g" > ./.current_branch
