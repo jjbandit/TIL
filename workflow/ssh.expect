@@ -1,0 +1,9 @@
+set password [lindex $argv 0]
+set system [lindex $argv 1]
+set assetpack [lindex $argv 2]
+
+
+expect "jhughes@dev's password:"
+send "$password\n"
+
+expect EOF
