@@ -14,6 +14,5 @@ find . -type f -name \*.cpp -o -name \*.h | ctags --language-force=C++ -L -
 echo "Building cscope DB"
 cscope -b -i cscope.files
 
-cat cscope.files
-
-rm cscope.files
+# cat cscope.files
+# rm cscope.files

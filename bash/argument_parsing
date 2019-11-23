@@ -1,0 +1,18 @@
+
+
+while [[ $# > 0 ]]
+do
+  arg="$1"
+
+  case $arg in
+    [0-9]*)
+      Number="$arg"
+      ;;
+    *)
+      RemainingArgs="$RemainingArgs $arg"
+      ;;
+  esac
+
+  shift
+done
+
